@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.car_world'
+    namespace 'com.car_world'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.car_world"
+        applicationId "com.car_world"
         minSdk 21
         targetSdk 33
         versionCode 1
