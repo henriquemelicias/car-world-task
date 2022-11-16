@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">car-world</string>
+    <string name="app_name">Car World</string>
+    <string name="temp">temp</string>
 </resources>

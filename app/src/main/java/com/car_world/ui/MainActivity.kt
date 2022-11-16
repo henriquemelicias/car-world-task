@@ -15,6 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import com.car_world.ui.utils.DevicePosture
+import com.car_world.ui.utils.isBookPosture
+import com.car_world.ui.utils.isSeparating
+import com.car_world.ui.utils.isTableTopPosture
 import com.example.car_world.CardworldHomeUIState
 import com.example.car_world.CarworldApp
 import com.example.car_world.CarworldHomeViewModel
@@ -22,8 +25,6 @@ import com.example.car_world.ui.theme.CarworldTheme
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 class MainActivity : ComponentActivity() {
 
@@ -76,34 +77,13 @@ private fun onWindowLayoutChangeFlow(activityInstance: MainActivity) = WindowInf
         initialValue = DevicePosture.NormalPosture
     )
 
-@OptIn(ExperimentalContracts::class)
-fun isTableTopPosture(foldFeature : FoldingFeature?) : Boolean {
-    contract { returns(true) implies (foldFeature != null) }
-    return foldFeature?.state == FoldingFeature.State.HALF_OPENED &&
-            foldFeature.orientation == FoldingFeature.Orientation.HORIZONTAL
-}
-
-@OptIn(ExperimentalContracts::class)
-fun isBookPosture(foldFeature : FoldingFeature?) : Boolean {
-    contract { returns(true) implies (foldFeature != null) }
-    return foldFeature?.state == FoldingFeature.State.HALF_OPENED &&
-            foldFeature.orientation == FoldingFeature.Orientation.VERTICAL
-}
-
-@OptIn(ExperimentalContracts::class)
-fun isSeparating(foldFeature : FoldingFeature?) : Boolean {
-    contract { returns(true) implies (foldFeature != null) }
-    return foldFeature?.state == FoldingFeature.State.FLAT && foldFeature.isSeparating
-}
-
-
 @Preview(showBackground = true)
 @Composable
 fun CarworldAppPreview() {
     CarworldTheme {
         CarworldApp(
-            uiState = CardworldHomeUIState(),
-            windowWidth = WindowWidthSizeClass.Compact,
+            carworldHomeUIState = CardworldHomeUIState(),
+            windowSize = WindowWidthSizeClass.Compact,
             foldingDevicePosture = DevicePosture.NormalPosture
         )
     }
@@ -114,8 +94,8 @@ fun CarworldAppPreview() {
 fun CarworldAppPreviewTablet() {
     CarworldTheme {
         CarworldApp(
-            uiState = CardworldHomeUIState(),
-            windowWidth = WindowWidthSizeClass.Medium,
+            carworldHomeUIState = CardworldHomeUIState(),
+            windowSize = WindowWidthSizeClass.Medium,
             foldingDevicePosture = DevicePosture.NormalPosture
         )
     }
@@ -126,8 +106,8 @@ fun CarworldAppPreviewTablet() {
 fun CarworldAppPreviewDesktop() {
     CarworldTheme {
         CarworldApp(
-            uiState = CardworldHomeUIState(),
-            windowWidth = WindowWidthSizeClass.Expanded,
+            carworldHomeUIState = CardworldHomeUIState(),
+            windowSize = WindowWidthSizeClass.Expanded,
             foldingDevicePosture = DevicePosture.NormalPosture
         )
     }
