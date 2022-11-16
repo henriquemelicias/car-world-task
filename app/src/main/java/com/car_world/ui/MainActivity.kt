@@ -1,4 +1,4 @@
-package com.example.car_world
+package com.car_world.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,6 +10,9 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.car_world.CardworldHomeUIState
+import com.example.car_world.CarworldApp
+import com.example.car_world.CarworldHomeViewModel
 import com.example.car_world.ui.theme.CarworldTheme
 
 class MainActivity : ComponentActivity() {
