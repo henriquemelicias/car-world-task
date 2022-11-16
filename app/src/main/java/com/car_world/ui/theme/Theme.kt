@@ -1,4 +1,4 @@
-package com.example.car_world.ui.theme
+package com.car_world.ui.theme
 
 import android.app.Activity
 import android.os.Build

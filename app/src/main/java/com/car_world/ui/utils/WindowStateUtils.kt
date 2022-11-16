@@ -1,7 +1,14 @@
 package com.car_world.ui.utils
 
 import android.graphics.Rect
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
+import com.car_world.ui.MainActivity
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -46,15 +53,38 @@ fun isSeparating(foldFeature: FoldingFeature?): Boolean {
 }
 
 /**
- * Different type of navigation supported by app depending on size and state.
- */
-enum class CarworldNavigationType {
-    BOTTOM_NAVIGATION, NAVIGATION_RAIL, PERMANENT_NAVIGATION_DRAWER
-}
-
-/**
  * Content shown depending on size and state of device.
+ * TODO: change location or remove
  */
 enum class CarworldContentType {
     LIST_ONLY, LIST_AND_DETAIL
 }
+
+fun onWindowLayoutChangeFlow(activityInstance: MainActivity) = WindowInfoTracker.getOrCreate(
+    activityInstance
+)
+    .windowLayoutInfo(activityInstance)
+    .flowWithLifecycle(activityInstance.lifecycle)
+    .map { layoutInfo ->
+        val foldingFeature = layoutInfo
+            .displayFeatures
+            .filterIsInstance<FoldingFeature>()
+            .firstOrNull()
+        when {
+            isTableTopPosture(foldingFeature) ->
+                DevicePosture.TableTopPosture(foldingFeature.bounds)
+
+            isBookPosture(foldingFeature) ->
+                DevicePosture.BookPosture(foldingFeature.bounds)
+
+            isSeparating(foldingFeature) ->
+                DevicePosture.Separating(foldingFeature.bounds, foldingFeature.orientation)
+
+            else -> DevicePosture.NormalPosture
+        }
+    }
+    .stateIn(
+        scope = activityInstance.lifecycleScope,
+        started = SharingStarted.Eagerly,
+        initialValue = DevicePosture.NormalPosture
+    )
