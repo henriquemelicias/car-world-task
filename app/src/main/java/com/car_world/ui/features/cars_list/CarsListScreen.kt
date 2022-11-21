@@ -1,6 +1,5 @@
 package com.car_world.ui.features.cars_list
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
